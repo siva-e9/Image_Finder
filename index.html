@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Image</title>
+    <style>
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-drag: none;
+            -moz-user-drag: none;
+            user-drag: none;
+        }
+        img {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-drag: none;
+            -moz-user-drag: none;
+            user-drag: none;
+        }
+    </style>
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+    <h1 style="text-align: center;">Find Your Image</h1>
+    <p style="text-align: center;">Enter your roll number to find your photo:</p>
+    <input type="text" id="rollNumber" placeholder="Enter Roll Number" style="display: block; margin: 0 auto;">
+    <br>
+    <button onclick="findImage()" style="display: block; margin: 0 auto;">Find Image</button>
+    <br>
+    <img id="studentImage" src="" alt="Your photo will appear here" style="display: none; margin: 0 auto; display: block; height: 300px; width: 300px;">
+    <p id="rollNumberDisplay" style="text-align: center; display: none;"></p>
+
+    <script>
+        // Prevent devtools from being opened
+        var devtoolsOpen = false;
+        var threshold = 160;
+
+        function detectDevTools() {
+            var widthThreshold = window.innerWidth - 100;
+            var heightThreshold = window.innerHeight - 100;
+
+            if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > heightThreshold) {
+                devtoolsOpen = true;
+            } else {
+                devtoolsOpen = false;
+            }
+
+            if (devtoolsOpen) {
+                window.location.href = "about:blank";
+                window.close();
+            }
+        }
+
+        setInterval(detectDevTools, 1000);
+
+        // Disable right-click and text selection
+        document.oncontextmenu = function() {
+            return false;
+        };
+
+        document.onselectstart = function() {
+            return false;
+        };
+
+        document.onkeydown = function(e) {
+            if (e.keyCode === 123) {
+                return false;
+            }
+        };
+
+        function findImage() {
+            const baseURL = 'https://info.aec.edu.in/AEC/StudentPhotos/';
+            const rollNumber = document.getElementById('rollNumber').value.trim();
+
+            if (rollNumber === '') {
+                alert('Please enter your roll number.');
+                return;
+            }
+
+            const imageURL = baseURL + rollNumber + '.jpg';
+            const imgElement = document.getElementById('studentImage');
+            const rollNumberElement = document.getElementById('rollNumberDisplay');
+
+            imgElement.src = imageURL;
+            imgElement.style.display = 'block';
+            rollNumberElement.textContent = 'Roll Number: ' + rollNumber;
+            rollNumberElement.style.display = 'block';
+
+            console.log('Image URL:', imageURL);
+        }
+    </script>
+</body>
+</html>
